@@ -16,3 +16,7 @@ CREATE TABLE reviews (
   REFERENCES movies(id)
   ON DELETE SET NULL
 );
+
+
+DESCRIBE movies;
+DESCRIBE reviews;
