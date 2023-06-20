@@ -60,7 +60,7 @@ app.delete(`/api/movie/:id`, (req,res)=>{
     const sql = `DELETE FROM movies WHERE id = ?`;
     const params = [req.params.id];
 
-    db.query(sql, (err, rows)=> {
+    db.query(sql, params, (err, rows)=> {
         if(err){
             res.status(500).json({error: err.message});
             return;
