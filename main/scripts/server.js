@@ -1,10 +1,12 @@
 const express = require('express');
 const mysql = require('mysql2');
 
+//APP / PORT
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-// Express middleware
+// MIDDLEWARE
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -18,6 +20,8 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the movies_db database.`)
 );
+
+//ROUTES
 
 app.get('/api/movies', (req, res)=>{
     const sql = 'SELECT id, movie_name AS title FROM movies';
@@ -96,6 +100,8 @@ app.post(`/api/update-review`, (req, res)=>{
     })
 })
 
+
+//START SERVER
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
