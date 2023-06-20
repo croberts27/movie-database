@@ -33,3 +33,37 @@ app.get('/api/movies', (req, res)=>{
         });
     });
 });
+
+app.delete(`/api/movie/:id`, (req,res)=>{
+    const sql = `DELETE FROM movies WHERE id = ?`;
+    const params = [req.params.id];
+
+    db.query(sql, params, (req, res)=>{
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json({
+            message: 'Success!',
+            data: rows
+        });
+    })
+})
+
+app.post(`/api/add-movie`, (req, res)=>{
+    const sql = `INSERT INTO movie (movie_name)`
+    db.query(sql,(err, results)=>{
+        if(err){
+            res.status(500).json({error: err.message});
+            return;  
+        }
+        res.json({
+            message: 'Success!',
+            data: rows
+        })
+    })
+})
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
