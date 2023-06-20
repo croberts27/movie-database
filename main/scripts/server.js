@@ -20,9 +20,25 @@ const db = mysql.createConnection(
 );
 
 app.get('/api/movies', (req, res)=>{
-    const sql = 'SELECT id, movies_names AS title FROM movies';
+    const sql = 'SELECT id, movie_name AS title FROM movies';
 
-    db.query(sql, (err, row)=> {
+    db.query(sql, (err, rows)=> {
+        if(err){
+            res.status(500).json({error: err.message});
+            return;
+        }
+        res.json({
+            message: 'Success!',
+            data: rows
+        });
+    });
+});
+
+
+app.get('/api/reviews', (req, res)=>{
+    const sql = 'SELECT review FROM reviews';
+
+    db.query(sql, (err, rows)=> {
         if(err){
             res.status(500).json({error: err.message});
             return;
@@ -38,7 +54,7 @@ app.delete(`/api/movie/:id`, (req,res)=>{
     const sql = `DELETE FROM movies WHERE id = ?`;
     const params = [req.params.id];
 
-    db.query(sql, params, (req, res)=>{
+    db.query(sql, (err, rows)=> {
         if(err){
             res.status(500).json({error: err.message});
             return;
@@ -47,12 +63,28 @@ app.delete(`/api/movie/:id`, (req,res)=>{
             message: 'Success!',
             data: rows
         });
-    })
+    });
 })
 
 app.post(`/api/add-movie`, (req, res)=>{
-    const sql = `INSERT INTO movie (movie_name)`
-    db.query(sql,(err, results)=>{
+    const sql = `INSERT INTO movies(movie_name) VALUES (?) `
+    // console.log(req.body.title);
+    db.query(sql, req.body.title,(err, rows)=>{
+        if(err){
+            res.status(500).json({error: err.message});
+            return;  
+        }
+        res.json({
+            message: 'Success!',
+            data: rows
+        })
+    })
+})
+
+app.post(`/api/update-review`, (req, res)=>{
+    const sql = `INSERT INTO reviews(review) WHERE id VALUES (?) `
+    // console.log(req.body.review);
+    db.query(sql, req.body.review,(err, rows)=>{
         if(err){
             res.status(500).json({error: err.message});
             return;  
