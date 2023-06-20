@@ -18,4 +18,4 @@ VALUES ("9/10"),
        ("9.6/10");
 
 
-INSERT INTO movies (movie_name) VALUES ("The Incredibles");
+-- INSERT INTO movies (movie_name) VALUES ("The Incredibles");

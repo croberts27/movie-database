@@ -23,6 +23,8 @@ const db = mysql.createConnection(
 
 //ROUTES
 
+app.get("/", (req, res)=> res.send("Hello world!"));
+
 app.get('/api/movies', (req, res)=>{
     const sql = 'SELECT id, movie_name AS title FROM movies';
 
@@ -85,20 +87,33 @@ app.post(`/api/add-movie`, (req, res)=>{
     })
 })
 
-app.post(`/api/update-review`, (req, res)=>{
-    const sql = `INSERT INTO reviews(review) WHERE id VALUES (?) `
-    // console.log(req.body.review);
-    db.query(sql, req.body.review,(err, rows)=>{
-        if(err){
-            res.status(500).json({error: err.message});
-            return;  
+app.put(`/api/update-review/:id`, (req, res) => {
+    const reviewId = req.params.id;
+    const updatedReview = req.body.review;
+  
+    const sql = `UPDATE reviews SET review = ? WHERE id = ?`;
+  
+    db.query(sql, [updatedReview, reviewId], (err, result) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+  
+      if (result.affectedRows === 0) {
+        res.status(404).json({ message: 'Review not found' });
+        return;
+      }
+  
+      res.json({
+        message: 'Review updated successfully!',
+        data: {
+          reviewId: reviewId,
+          review: updatedReview
         }
-        res.json({
-            message: 'Success!',
-            data: rows
-        })
-    })
-})
+      });
+    });
+  });
+
 
 
 //START SERVER
